@@ -271,7 +271,7 @@ export class TypebotService {
     this.logger.verbose('get type message');
    
     const types = {
-    conversation: msg.message.conversation,
+    conversation: msg.listResponseMessage ? msg.listResponseMessage.title : undefined,
     extendedTextMessage: msg.message.extendedTextMessage?.text,
     listResponseMessage: msg.listResponseMessage ? msg.listResponseMessage.title : undefined
     };
@@ -280,6 +280,7 @@ export class TypebotService {
    
     return types;
    }
+   
    
    
    
