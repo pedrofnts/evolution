@@ -543,30 +543,30 @@ export class TypebotService {
         let rowId = 1; // Adicione esta linha
        
         await instance.listMessage({
-         number: remoteJid.split('@')[0],
-         options: {
-           delay: 1200,
-           presence: 'composing',
-         },
-         listMessage: {
-           title: items[0].content,
-           description: items[1].content,
-           buttonText: items[2].content, 
-           sections: items.slice(3).map((item, index) => { 
-             const currentRowId = `rowId ${String(rowId++).padStart(3, '0')}`; 
-             return {
-               title: item.content,
-               rows: [{
-                 title: item.content,
-                 description: "",
-                 rowId: currentRowId 
-               }]
-             };
-           })
-         },
+        number: remoteJid.split('@')[0],
+        options: {
+          delay: 1200,
+          presence: 'composing',
+        },
+        listMessage: {
+          title: items[0].content, // Primeiro item é o título
+          description: items[1].content, // Segundo item é a descrição
+          buttonText: items[2].content, // Terceiro item é o botão
+          sections: [{ // Crie apenas uma seção chamada "Menu"
+            title: "Menu",
+            rows: items.slice(3).map((item, index) => { // Os itens subsequentes são os títulos das linhas
+              const currentRowId = `rowId ${String(rowId++).padStart(3, '0')}`; // Atualize o rowId aqui
+              return {
+                title: item.content,
+                description: "",
+                rowId: currentRowId // Use o rowId atualizado aqui
+              };
+            })
+          }]
+        },
         });
         }
-       }
+      }       
         else {
         eventEmitter.emit('typebot:end', {
           instance: instance,
