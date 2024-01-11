@@ -272,7 +272,7 @@ export class TypebotService {
    
     const types = {
     conversation: msg.listResponseMessage ? msg.listResponseMessage.title : undefined,
-    extendedTextMessage: msg.message.extendedTextMessage?.text,
+    extendedTextMessage: msg.message && msg.message.extendedTextMessage ? msg.message.extendedTextMessage.text : undefined,
     listResponseMessage: msg.listResponseMessage ? msg.listResponseMessage.title : undefined
     };
    
@@ -280,6 +280,7 @@ export class TypebotService {
    
     return types;
    }
+   
    
    
    
