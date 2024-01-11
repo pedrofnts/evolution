@@ -267,20 +267,20 @@ export class TypebotService {
       },
     };
   }
-
   private getTypeMessage(msg: any) {
     this.logger.verbose('get type message');
    
     const types = {
-     conversation: msg.conversation,
-     extendedTextMessage: msg.extendedTextMessage?.text,
-     listResponseMessage: msg.message?.listResponseMessage ? msg.message.listResponseMessage.title : undefined
+    conversation: msg.message.conversation,
+    extendedTextMessage: msg.message.extendedTextMessage?.text,
+    listResponseMessage: msg.listResponseMessage ? msg.listResponseMessage.title : undefined
     };
    
     this.logger.verbose('type message: ' + JSON.stringify(types));
    
     return types;
    }
+   
    
    
 
