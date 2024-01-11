@@ -270,18 +270,21 @@ export class TypebotService {
 
   private getTypeMessage(msg: any) {
     this.logger.verbose('get type message');
-
+  
+    // Verifique se msg.message existe antes de acessar suas propriedades
     const types = {
       conversation: msg.conversation,
       extendedTextMessage: msg.extendedTextMessage?.text,
-      listResponseMessage: msg.message.listResponseMessage?.title ||
-        msg.message.listResponseMessage?.singleSelectReply?.selectedRowId
+      listResponseMessage: msg.message?.listResponseMessage?.title ||
+        msg.message?.listResponseMessage?.singleSelectReply?.selectedRowId
     };
-
-    this.logger.verbose('type message: ' + types);
-
+  
+    // Use JSON.stringify para converter o objeto em uma string para o log
+    this.logger.verbose('type message: ' + JSON.stringify(types));
+  
     return types;
   }
+  
 
   private getMessageContent(types: any) {
     this.logger.verbose('get message content');
