@@ -543,31 +543,31 @@ export class TypebotService {
         let rowId = 1; // Adicione esta linha
        
         await instance.listMessage({
-          number: remoteJid.split('@')[0],
-          options: {
-            delay: 1200,
-            presence: 'composing',
-          },
-          listMessage: {
-            title: "List Title",
-            description: "List description",
-            buttonText: "Click Here",
-            footerText: "footer list\nhttps://examplelink.com.br",
-            sections: items.map(item => {
-              const currentRowId = rowId++; // Atualize o rowId aqui
-              return {
-                title: item.content,
-                rows: [{
-                  title: item.content,
-                  description: "",
-                  rowId: currentRowId.toString() // Use o rowId atualizado aqui
-                }]
-              };
-            })
-          },
+         number: remoteJid.split('@')[0],
+         options: {
+           delay: 1200,
+           presence: 'composing',
+         },
+         listMessage: {
+           title: items[0].content,
+           description: items[1].content,
+           buttonText: items[2].content, 
+           sections: items.slice(3).map((item, index) => { 
+             const currentRowId = `rowId ${String(rowId++).padStart(3, '0')}`; 
+             return {
+               title: item.content,
+               rows: [{
+                 title: item.content,
+                 description: "",
+                 rowId: currentRowId 
+               }]
+             };
+           })
+         },
         });
-        }       
-      } else {
+        }
+       }
+        else {
         eventEmitter.emit('typebot:end', {
           instance: instance,
           remoteJid: remoteJid,
