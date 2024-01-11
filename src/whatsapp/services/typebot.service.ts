@@ -271,20 +271,16 @@ export class TypebotService {
   private getTypeMessage(msg: any) {
     this.logger.verbose('get type message');
   
-    // Verifique se msg.message existe antes de acessar suas propriedades
     const types = {
       conversation: msg.conversation,
       extendedTextMessage: msg.extendedTextMessage?.text,
-      listResponseMessage: msg.message?.listResponseMessage?.title ||
-        msg.message?.listResponseMessage?.singleSelectReply?.selectedRowId
+      listResponseMessage: msg.message?.listResponseMessage ? 'List Response Received' : undefined
     };
   
-    // Use JSON.stringify para converter o objeto em uma string para o log
     this.logger.verbose('type message: ' + JSON.stringify(types));
   
     return types;
   }
-  
 
   private getMessageContent(types: any) {
     this.logger.verbose('get message content');
@@ -449,6 +445,24 @@ export class TypebotService {
     async function processMessages(instance, messages, input, clientSideActions, eventEmitter, applyFormatting) {
       for (const message of messages) {
         const wait = findItemAndGetSecondsToWait(clientSideActions, message.id);
+
+        if (message.type === 'listResponseMessage') {
+          const listResponseTitle = message.message.listResponseMessage.title;
+          
+          const listResponseText = `Você selecionou: ${listResponseTitle}`;
+          
+          await instance.textMessage({
+            number: remoteJid.split('@')[0],
+            options: {
+              delay: wait ? wait * 1000 : instance.localTypebot.delay_message || 1000,
+              presence: 'composing',
+            },
+            textMessage: {
+              text: listResponseText,
+            },
+          });
+         }
+         
 
         if (message.type === 'text') {
           let formattedText = '';
