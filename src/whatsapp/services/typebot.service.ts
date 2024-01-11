@@ -274,6 +274,8 @@ export class TypebotService {
     const types = {
       conversation: msg.conversation,
       extendedTextMessage: msg.extendedTextMessage?.text,
+      listResponseMessage: msg.message.listResponseMessage?.title ||
+        msg.message.listResponseMessage?.singleSelectReply?.selectedRowId
     };
 
     this.logger.verbose('type message: ' + types);
