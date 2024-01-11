@@ -296,6 +296,7 @@ export class TypebotService {
 
     return result;
   }
+  
 
   private getConversationMessage(msg: any) {
     this.logger.verbose('get conversation message');
@@ -537,27 +538,35 @@ export class TypebotService {
 
       if (input) {
         if (input.type === 'choice input') {
-          let formattedText = '';
-
-          const items = input.items;
-
-          for (const item of items) {
-            formattedText += `▶️ ${item.content}\n`;
-          }
-
-          formattedText = formattedText.replace(/\n$/, '');
-
-          await instance.textMessage({
-            number: remoteJid.split('@')[0],
-            options: {
-              delay: 1200,
-              presence: 'composing',
-            },
-            textMessage: {
-              text: formattedText,
-            },
-          });
-        }
+        const items = input.items;
+       
+        let rowId = 1; // Adicione esta linha
+       
+        await instance.listMessage({
+          number: remoteJid.split('@')[0],
+          options: {
+            delay: 1200,
+            presence: 'composing',
+          },
+          listMessage: {
+            title: "List Title",
+            description: "List description",
+            buttonText: "Click Here",
+            footerText: "footer list\nhttps://examplelink.com.br",
+            sections: items.map(item => {
+              const currentRowId = rowId++; // Atualize o rowId aqui
+              return {
+                title: item.content,
+                rows: [{
+                  title: item.content,
+                  description: "",
+                  rowId: currentRowId.toString() // Use o rowId atualizado aqui
+                }]
+              };
+            })
+          },
+        });
+        }       
       } else {
         eventEmitter.emit('typebot:end', {
           instance: instance,
