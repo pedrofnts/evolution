@@ -269,19 +269,18 @@ export class TypebotService {
   }
   private getTypeMessage(msg: any) {
     this.logger.verbose('get type message');
-   
+  
     const types = {
       conversation: msg.conversation,
-      extendedTextMessage: msg.extendedTextMessage?.text,
-      listResponseMessage: msg.message.listResponseMessage?.title ||
-        msg.message.listResponseMessage?.singleSelectReply?.selectedRowId
+      extendedTextMessage: msg.message && msg.message.extendedTextMessage ? msg.message.extendedTextMessage.text : undefined,
+      listResponseMessage: msg.listResponseMessage ? msg.listResponseMessage.title : undefined
     };
-    
-   
-    this.logger.verbose('type message: ' + types);
-   
+  
+    this.logger.verbose('type message: ' + JSON.stringify(types));
+  
     return types;
-   }
+  }
+  
    
    
    
